@@ -2,14 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <UserSecretsId>fbb11e5c-0e36-4de1-9802-622e2d109d1b</UserSecretsId>
+    <UserSecretsId>207289f5-73d0-48ae-baa4-7fca8e2fd0bb</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,10 +20,6 @@
   <ItemGroup>
     <ProjectReference Include="..\UrlShortener.DAL\UrlShortener.DAL.csproj" />
     <ProjectReference Include="..\UrlShortener.Models\UrlShortener.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ViewModels\AccountViewModels\" />
   </ItemGroup>
 
 </Project>
