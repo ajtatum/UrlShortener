@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using BabouExtensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using UrlShortener.DAL;
 using UrlShortener.Models;
 using UrlShortener.Web.ViewModels;
@@ -45,7 +47,7 @@ namespace UrlShortener.Web.Controllers
             {
                 ShortenedUrlId = shortenedUrlId,
                 ClickDate = DateTime.Now,
-                Referrer = Request.Headers["Referer"].ToString()
+                Referrer = HttpContext.Request.Headers[HeaderNames.Referer].ToString().Truncate(500, false)
             };
 
             dbContext.ShortenedUrlClicks.Add(click);
