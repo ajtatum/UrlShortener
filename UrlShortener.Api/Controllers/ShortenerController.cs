@@ -23,7 +23,7 @@ namespace UrlShortener.Api.Controllers
         {
             if (!string.IsNullOrEmpty(id))
             {
-                var urlShortener = dbContext.UrlShorteners.FirstOrDefault(x => x.Id == id);
+                var urlShortener = dbContext.ShortenedUrls.FirstOrDefault(x => x.Id == id);
 
                 if (urlShortener != null)
                 {

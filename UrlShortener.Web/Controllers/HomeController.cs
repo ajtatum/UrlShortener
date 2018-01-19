@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortener.DAL;
 using UrlShortener.Models;
@@ -12,35 +11,19 @@ namespace UrlShortener.Web.Controllers
     public class HomeController : Controller
     {
         private readonly PlaygroundContext dbContext;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(PlaygroundContext playgroundContext, UserManager<ApplicationUser> userManager)
+        public HomeController(PlaygroundContext playgroundContext)
         {
             this.dbContext = playgroundContext;
-            this._userManager = userManager;
         }
 
         [Route("")]
         [HttpGet("{id}")]
-        public async Task<IActionResult> Index(string id)
+        public IActionResult Index(string id)
         {
             if (!string.IsNullOrEmpty(id))
             {
-                var urlShortener = dbContext.ShortenedUrls.FirstOrDefault(x => x.Id == id);
-
-                if(urlShortener != null)
-                {
-                    return Redirect(urlShortener.LongUrl);
-                }
-            }
-
-            if (User != null)
-            {
-                var user = await _userManager.GetUserAsync(User);
-
-                var urlShorteners = dbContext.ShortenedUrls.FirstOrDefault(x=>x.CreatedBy == user.Id)?.LongUrl ?? "Nada";
-
-                ViewBag.Test = urlShorteners;
+                RedirectToLongUrl(id);
             }
 
             return View();
@@ -49,6 +32,27 @@ namespace UrlShortener.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private void RedirectToLongUrl(string shortenedUrlId)
+        {
+            var urlShortener = dbContext.ShortenedUrls.FirstOrDefault(x => x.Id == shortenedUrlId);
+
+            if (urlShortener == null)
+                return;
+
+            var click = new ShortenedUrlClick()
+            {
+                ShortenedUrlId = shortenedUrlId,
+                ClickDate = DateTime.Now,
+                Referrer = Request.Headers["Referer"].ToString()
+            };
+
+            dbContext.ShortenedUrlClicks.Add(click);
+            dbContext.SaveChanges();
+
+            Response.Redirect(urlShortener.LongUrl);
+            Response.Body.Dispose();
         }
     }
 }

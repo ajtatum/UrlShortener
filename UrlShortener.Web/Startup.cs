@@ -21,6 +21,11 @@ namespace UrlShortener.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<IISOptions>(options =>
+            {
+                options.AutomaticAuthentication = false;
+            });
+
             services.AddDbContext<PlaygroundContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("PlaygroundDatabase")));
 
