@@ -1,30 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using UrlShortener.Web.Models;
+using UrlShortener.DAL;
+using UrlShortener.Web.ViewModels;
 
 namespace UrlShortener.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly PlaygroundContext dbContext;
+
+        public HomeController(PlaygroundContext playgroundContext)
         {
-            return View();
+            this.dbContext = playgroundContext;
         }
 
-        public IActionResult About()
+        public IActionResult Index(string id)
         {
-            ViewData["Message"] = "Your application description page.";
+            if (!string.IsNullOrEmpty(id))
+            {
+                var urlShortener = dbContext.UrlShorteners.FirstOrDefault(x => x.Id == id);
 
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+                if(urlShortener != null)
+                {
+                    return Redirect(urlShortener.LongUrl);
+                }
+            }
 
             return View();
         }

@@ -1,6 +1,4 @@
-using System;
-
-namespace UrlShortener.Web.Models
+namespace UrlShortener.Web.ViewModels
 {
     public class ErrorViewModel
     {
