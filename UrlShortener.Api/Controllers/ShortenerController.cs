@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using BabouExtensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using UrlShortener.DAL;
 using UrlShortener.Models;
@@ -31,6 +30,11 @@ namespace UrlShortener.Api.Controllers
             }
 
             return new HttpResponseMessage(HttpStatusCode.NotFound);
+        }
+
+        public IActionResult Get()
+        {
+            return Ok(dbContext.ShortenedUrls.ToListAsync());
         }
 
         [HttpPost]

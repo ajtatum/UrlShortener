@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using UrlShortener.DAL;
 
 namespace UrlShortener.Api
@@ -25,10 +20,26 @@ namespace UrlShortener.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-
             services.AddDbContext<PlaygroundContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("PlaygroundDatabase")));
+
+            services
+                .AddMvcCore()
+                .AddJsonFormatters()
+                .AddAuthorization();
+
+            services.AddCors();
+            services.AddDistributedMemoryCache();
+
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+               .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = Configuration["AuthServer:Authority"];
+                    options.RequireHttpsMetadata = false;
+
+                    options.ApiName = Configuration["AuthServer:ApiName"];
+                    options.ApiSecret = Configuration["AuthServer:ClientSecret"];
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +49,19 @@ namespace UrlShortener.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(policy =>
+            {
+                policy.WithOrigins(
+                    Configuration["AuthServer:Authority"],
+                    Configuration["AuthServer:Url"]);
+
+                policy.AllowAnyHeader();
+                policy.AllowAnyMethod();
+                policy.WithExposedHeaders("WWW-Authenticate");
+            });
+
+            app.UseAuthentication();
 
             app.UseMvc();
         }
