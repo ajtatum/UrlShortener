@@ -10,6 +10,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\AccountViewModels\**" />
+    <Compile Remove="ViewModels\ManageViewModels\**" />
+    <Content Remove="ViewModels\AccountViewModels\**" />
+    <Content Remove="ViewModels\ManageViewModels\**" />
+    <EmbeddedResource Remove="ViewModels\AccountViewModels\**" />
+    <EmbeddedResource Remove="ViewModels\ManageViewModels\**" />
+    <None Remove="ViewModels\AccountViewModels\**" />
+    <None Remove="ViewModels\ManageViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\AccountController.cs" />
+    <Compile Remove="Controllers\ManageController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BabouExtensions" Version="1.1.15" />
     <PackageReference Include="IdentityModel" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
@@ -26,10 +42,6 @@
   <ItemGroup>
     <ProjectReference Include="..\UrlShortener.DAL\UrlShortener.DAL.csproj" />
     <ProjectReference Include="..\UrlShortener.Models\UrlShortener.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ViewModels\AccountViewModels\" />
   </ItemGroup>
 
 </Project>
