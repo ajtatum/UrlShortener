@@ -1,5 +1,4 @@
-﻿@using UrlShortener.Web.ViewModels
-@model UrlShortener.Web.ViewModels.ErrorViewModel
+﻿@model UrlShortener.Web.ViewModels.ErrorViewModel
 @{
     ViewData["Title"] = "Error";
 }
@@ -13,6 +12,8 @@
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
     </p>
 }
+
+@ViewData["Error"]
 
 <h3>Development Mode</h3>
 <p>
